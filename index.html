@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>(G5560) 栽培学 試験対策ポータル</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn menu-btn" id="menuBtn" aria-label="メニューを開く">☰</button>
+      <a href="#overview" class="brand" id="brandLink">
+        <span class="brand-badge">G5560</span>
+        <span class="brand-title">栽培学 試験対策ポータル</span>
+      </a>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="searchInput" placeholder="用語・作物名を検索 (例: オーキシン)" />
+      </div>
+      <button class="btn btn-toggle" id="maskToggleBtn" title="重要語句を赤シート風に隠します">
+        🟥 赤シート
+      </button>
+      <button class="btn" id="themeToggleBtn" title="ライト/ダーク表示を切替">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="nav-section-title">メニュー</div>
+      <button class="nav-item active" data-view="overview">
+        <span>🏠 試験対策トップ・比較表</span>
+      </button>
+      <button class="nav-item" data-view="flashcards">
+        <span>🃏 一問一答カード</span>
+        <span class="nav-pill" id="pillFlashcards">0</span>
+      </button>
+      <button class="nav-item" data-view="quiz">
+        <span>📝 4択実戦テスト</span>
+        <span class="nav-pill" id="pillQuiz">0</span>
+      </button>
+      <button class="nav-item" data-view="essay">
+        <span>✍️ 記述・論述対策</span>
+        <span class="nav-pill" id="pillEssay">0</span>
+      </button>
+
+      <div class="nav-section-title">講義単元ノート</div>
+      <div id="unitNavList"></div>
+
+      <div class="nav-section-title">学習データ</div>
+      <button class="nav-item" id="resetProgressBtn" style="color:var(--danger);">
+        <span>🗑️ 学習記録をリセット</span>
+      </button>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <noscript>JavaScriptを有効にしてご利用ください。</noscript>
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
