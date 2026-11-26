@@ -223,6 +223,9 @@ body {
 }
 
 .btn-accent:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
   filter: brightness(1.06);
 }
 
@@ -813,22 +816,17 @@ tr:last-child td {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   .topbar {
     padding: 0 12px;
     gap: 8px;
   }
   .search-box {
-    max-width: 160px;
-  }
-  .brand-title {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 560px) {
-  .search-box {
     display: none;
+  }
+  .mobile-search {
+    display: block !important;
+    margin-bottom: 12px;
   }
   .brand-title {
     font-size: 0.92rem;

@@ -28,7 +28,8 @@
       finished: false
     },
     essay: {
-      filterUnit: "all"
+      filterUnit: "all",
+      openIds: []
     }
   };
 
@@ -103,8 +104,11 @@
     });
 
     const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", () => {
-      state.searchQuery = searchInput.value.trim();
+    const mobileSearchInput = document.getElementById("mobileSearchInput");
+    const handleSearch = (val) => {
+      state.searchQuery = val.trim();
+      if (searchInput.value !== val) searchInput.value = val;
+      if (mobileSearchInput && mobileSearchInput.value !== val) mobileSearchInput.value = val;
       if (state.searchQuery.length > 0) {
         state.view = "search";
         updateActiveNav();
@@ -112,7 +116,11 @@
       } else if (state.view === "search") {
         navigate("overview");
       }
-    });
+    };
+    searchInput.addEventListener("input", () => handleSearch(searchInput.value));
+    if (mobileSearchInput) {
+      mobileSearchInput.addEventListener("input", () => handleSearch(mobileSearchInput.value));
+    }
 
     document.querySelectorAll(".nav-item[data-view]").forEach((btn) => {
       btn.addEventListener("click", () => navigate(btn.dataset.view));
@@ -146,13 +154,15 @@
     if (view !== "search") {
       state.searchQuery = "";
       document.getElementById("searchInput").value = "";
+      const ms = document.getElementById("mobileSearchInput");
+      if (ms) ms.value = "";
     }
     document.getElementById("sidebar").classList.remove("open");
     if (view === "flashcards") buildFlashcardDeck();
     if (view === "quiz" && state.quiz.questions.length === 0) startQuiz("all", "all");
     updateActiveNav();
     render();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0);
   }
 
   function updateActiveNav() {
@@ -674,6 +684,7 @@
       ${list
         .map((item, i) => {
           const isDone = state.progress.checkedEssays.includes(item.id);
+          const isOpen = state.essay.openIds.includes(item.id);
           const kwHtml = item.keywords
             ? `<div style="margin:8px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
                 <span style="font-size:0.8rem;font-weight:700;color:var(--text-muted);">必須キーワード：</span>
@@ -692,8 +703,8 @@
             </div>
           </div>
           <div style="font-weight:700;font-size:1.02rem;margin-bottom:10px;">${escapeHtml(item.question)}</div>
-          <button class="btn btn-sm btn-primary essay-toggle-btn" data-essay-idx="${i}">解答例・キーワードを見る</button>
-          <div class="essay-answer" id="essayAns-${i}">
+          <button class="btn btn-sm btn-primary essay-toggle-btn" data-essay-idx="${i}" data-essay-id="${item.id}">${isOpen ? "解答を隠す" : "解答例・キーワードを見る"}</button>
+          <div class="essay-answer ${isOpen ? "open" : ""}" id="essayAns-${i}">
             ${kwHtml}
             <div><strong>【模範解答】</strong></div>
             <div style="margin-top:4px;">${item.answer}</div>
@@ -998,10 +1009,15 @@
 
     document.querySelectorAll(".essay-toggle-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
+        const eid = btn.dataset.essayId;
         const ans = document.getElementById("essayAns-" + btn.dataset.essayIdx);
         if (ans) {
           const open = ans.classList.toggle("open");
           btn.textContent = open ? "解答を隠す" : "解答例・キーワードを見る";
+          if (eid) {
+            if (open && !state.essay.openIds.includes(eid)) state.essay.openIds.push(eid);
+            if (!open) state.essay.openIds = state.essay.openIds.filter((id) => id !== eid);
+          }
         }
       });
     });
@@ -1009,6 +1025,7 @@
     const openAll = document.getElementById("essayOpenAllBtn");
     if (openAll) {
       openAll.addEventListener("click", () => {
+        state.essay.openIds = SAIBAI_DATA.essays.map((e) => e.id);
         document.querySelectorAll(".essay-answer").forEach((el) => el.classList.add("open"));
         document.querySelectorAll(".essay-toggle-btn").forEach((b) => (b.textContent = "解答を隠す"));
       });
@@ -1017,6 +1034,7 @@
     const closeAll = document.getElementById("essayCloseAllBtn");
     if (closeAll) {
       closeAll.addEventListener("click", () => {
+        state.essay.openIds = [];
         document.querySelectorAll(".essay-answer").forEach((el) => el.classList.remove("open"));
         document.querySelectorAll(".essay-toggle-btn").forEach((b) => (b.textContent = "解答例・キーワードを見る"));
       });
