@@ -347,7 +347,7 @@ body {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
 }
 
@@ -810,6 +810,19 @@ tr:last-child td {
 
   .hero h1 {
     font-size: 1.32rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .search-box {
+    max-width: 160px;
+  }
+  .brand-title {
+    font-size: 0.9rem;
   }
 }
 

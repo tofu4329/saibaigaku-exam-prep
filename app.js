@@ -92,6 +92,8 @@
       btn.classList.toggle("active", state.maskMode);
       btn.textContent = state.maskMode ? "🟥 赤シート ON" : "🟥 赤シート";
       document.querySelectorAll(".cloze.revealed").forEach((el) => el.classList.remove("revealed"));
+      const statMask = document.getElementById("statMaskValue");
+      if (statMask) statMask.textContent = state.maskMode ? "ON" : "OFF";
     });
 
     document.getElementById("themeToggleBtn").addEventListener("click", () => {
@@ -266,7 +268,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-label">赤シート機能</div>
-            <div class="stat-value">${state.maskMode ? "ON" : "OFF"}</div>
+            <div class="stat-value" id="statMaskValue">${state.maskMode ? "ON" : "OFF"}</div>
           </div>
         </div>
       </section>
